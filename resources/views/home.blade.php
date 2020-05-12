@@ -107,7 +107,6 @@
         copyText.setSelectionRange(0, 99999); 
         document.execCommand("copy");
         alert("Kopyalanan Veri: " + copyText.value);
-        //alert2
         }
     </script>
 @endsection
