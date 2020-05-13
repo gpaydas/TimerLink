@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Url;
+use App\Models\UrlClick;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -59,8 +61,9 @@ class UrlController extends Controller
         }
 
         $url=url('/');
-        $start_date = new Carbon('UTC');
-        $end_date=new Carbon('UTC');
+        setlocale(LC_TIME, 'Turkish');
+        $start_date = Carbon::now('Europe/Istanbul');
+        $end_date= Carbon::now('Europe/Istanbul');
         $end_date=$end_date->addMinutes($total);
 
         $sonuc=Url::create(
@@ -74,12 +77,56 @@ class UrlController extends Controller
             'period_type'=>request('period_type')
             ]
             );
-        $sonuc_url=$url.'/'.'lnk/'.strtolower(Str::random(4)).$sonuc->id.strtolower(Str::random(5));
+
+
+       $sonuc_url=$url.'/'.'lnk/'.strtolower(Str::random(4)).$sonuc->id.strtolower(Str::random(5));
         Url::where('id', $sonuc->id)
             ->update(['short_link' => $sonuc_url]);
+
         return response()->json(['success' => true,'msj'=>$sonuc_url]
         ,200,
         ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT
                                 );
     }
+
+    public function yonlendir($url)
+    {
+        $int=strlen($url);
+        $int=$int-9;
+        if ($int<=0)
+        {
+            $data['title'] = '404';
+            $data['name'] = 'Page not found';
+            return response()
+                ->view('errors.404');
+        }
+        else
+        {
+            $id_c=substr($url,4,$int);
+            $sonuc=Url::where('id',$id_c)->firstOrFail();
+            setlocale(LC_TIME, 'Turkish');
+            $start_date = Carbon::now('Europe/Istanbul');
+            if ($start_date > $sonuc->end_date)
+            {
+                return response()
+                    ->view('errors.404');
+            }
+            else
+            {
+                $long_url=$sonuc->long_link;
+                $click=$sonuc->click;
+                UrlClick::create(
+                    [
+                        'ipadress'=>request()->ip(),
+                        'url_id'=>$id_c
+                    ]
+                );
+                // return redirect($long_url);
+            }
+
+            //  return response()
+            //  ->view($long_url);
+        }
+    }
+
 }

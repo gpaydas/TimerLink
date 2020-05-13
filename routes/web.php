@@ -17,4 +17,6 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 Route::get('/','UrlController@index')->name('anasayfa');
+Route::get('/anasayfa','UrlController@index')->name('anasayfa');
 Route::post('/kaydol','UrlController@kaydet')->name('url.kaydol');
+Route::get('/lnk/{link}','UrlController@yonlendir')->name('url.yonlendir');
