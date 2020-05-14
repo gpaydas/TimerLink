@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\Url;
 use App\Models\UrlClick;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -128,5 +129,32 @@ class UrlController extends Controller
             //  ->view($long_url);
         }
     }
+
+    public function list(){
+       /* $sonuc=Url::all();*/
+       $aktif= request()->input('aktif');
+       $pasif= request()->input('pasif');
+       $siralama= (!empty(request()->input('siralama'))) ? request()->input('siralama') : 1;
+
+       $eksql="where 1=1";
+
+       if (($aktif=="on") && ($pasif!="on")){$eksql=$eksql." and now()<=u.end_date";}
+       if (($pasif=="on") && ($aktif!="on")){$eksql=$eksql." and now()>u.end_date";}
+       if ($siralama==1){$alan="click_total"; $sira="desc";}
+       else if ($siralama==2){$alan="click_total"; $sira="asc";}
+       else if ($siralama==3){$alan="start_date"; $sira="desc";}
+       else if ($siralama==4){$alan="start_date"; $sira="asc";}
+
+        $sonuc = Url::select(DB::raw("*"))
+            ->from(DB::raw("(SELECT u.*,
+                            (case when now()>u.end_date then 'Bitti' else '' end) as durum,
+                            (select count(*) from urlclick as uc where uc.url_id=u.id) as click_total
+                             FROM url as u $eksql
+                             ) as tab1"))
+            ->orderBy($alan, $sira)
+            ->paginate(8); /*sayfalandırma sağlıyor*/
+        request()->flash();
+        return view('admin.dashboard',compact('sonuc'));
+   }
 
 }

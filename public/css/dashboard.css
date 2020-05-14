@@ -1,0 +1,64 @@
+
+    /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+    .row.content {height: 750px}
+    
+    /* Set gray background color and 100% height */
+    .sidenav {
+      background-color:#5f6cac;
+      height: 100%;
+    }
+
+    a {
+        color: #fff;
+    }
+
+    h1,h2,h3,h4,h5,h6 {
+       /* color: #fff;*/
+        text-align: center;
+      }
+    
+    /* Set black background color, white text and some padding */
+    footer {
+      background-color: #555;
+      color: white;
+      padding: 5px;
+    }
+    
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {height: auto;} 
+    }
+
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        background-color: #f1f1f1;
+        border: 1px solid #004085;
+      }
+    li{
+        border-bottom: 1px solid #004085;
+      }
+      li a.active {
+        background-color: #004085;
+        color: white;
+      }
+
+      li a {
+        display: block;
+        color: #000;
+        padding: 8px 16px;
+        text-decoration: none;
+      }
+      
+      /* Change the link color on hover */
+      li a:hover {
+        background-color: #3f4668;
+        color: white;
+      }
