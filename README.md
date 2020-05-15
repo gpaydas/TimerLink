@@ -4,12 +4,12 @@
 
 TimerLink ile süreli url linki paylaşmanıza imkan tanır, siz bir url yi oluşturur süresini belirlersiniz o süre dolduktan sonra url artık bir işe yaramaz.
 
-# Kurulum İşlemi
+# Neler Lazım
 
 - Laravel 7.x
 - Mysql
 
-# Neler Lazım
+# Kurulum İşlemi
 
 - Mysql sunucunuzda bir tane database oluşturulur
 - .env dosyasında veritabanı bağlantı işlemleri yapılır
