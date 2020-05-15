@@ -1,9 +1,9 @@
 @if (count($errors)>0)
     <div class="alert alert-danger">
         <p>Hata!</p>
-        <ul>
+        <ul class="list-group">
             @foreach($errors->all() as $error)
-                <li>{{$error}}</li>
+            <li class="list-group-item">{{$error}}</li>
             @endforeach
         </ul>
     </div>

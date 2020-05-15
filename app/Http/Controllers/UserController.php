@@ -10,18 +10,20 @@ class UserController extends Controller
     {
         $this->middleware('guest')->except('oturumukapat');
     }
+
     public function giris_form()
     {
         return view('admin.login');
     }
-    public function oturumukapat()
-    {
+    
+    public function oturumukapat() 
+    {  
         auth()->logout();
         request()->session()->flush();
         request()->session()->regenerate();
         return redirect()->route('anasayfa');
     }
-
+    
     public function giris()
     {
  
@@ -42,10 +44,11 @@ class UserController extends Controller
         )) {
 
             request()->session()->regenerate();
-            return redirect()->intended('/');
+            return redirect()->intended('/home');
         } else {
             $errors = ['email' => 'Hatalı Giriş'];
             return back()->withErrors($errors); /*Geldiğimiz Sayfaya Geri Döner */
         }
     }
+
 }

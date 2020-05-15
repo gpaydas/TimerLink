@@ -22,15 +22,20 @@ Route::get('/anasayfa','UrlController@index')->name('anasayfa');
 Route::post('/kaydol','UrlController@kaydet')->name('url.kaydol');
 Route::get('/lnk/{link}','UrlController@yonlendir')->name('url.yonlendir');
 
-Route::group(['middleware'=>'auth'],function(){
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    });
-});
 
-Auth::routes();
-Route::get('/home','UrlController@list')->name('home');
-Route::post('/home','UrlController@list')->name('dashboard.home');
+//Auth::routes();
+
 
 Route::get('/login', 'UserController@giris_form')->name('login');
 Route::post('/login','UserController@giris')->name('user.giris');
+
+
+Route::group(['middleware' => ['auth']],function(){
+
+    Route::get('/home','UrlController@list')->name('home');
+    Route::post('/home','UrlController@list')->name('dashboard.home');
+    Route::get('/oturumukapat','UserController@oturumukapat')->name('user.oturumukapat');
+    Route::get('/guncelle','UrlController@userUpdate_form')->name('userguncel');
+    Route::post('/guncelle','UrlController@userUpdate')->name('userguncel.post');
+    });
+     

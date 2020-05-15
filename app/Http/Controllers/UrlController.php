@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\Url;
 use App\Models\UrlClick;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
@@ -157,4 +158,44 @@ class UrlController extends Controller
         return view('admin.dashboard',compact('sonuc'));
    }
 
+   public function userUpdate_form()
+   {
+    return view('admin.userupd');
+   }
+
+   public function userUpdate()
+   {
+    $user = Auth::user();
+    $request=request()->all();
+    
+    $customMessages = [
+        'name.required' => 'İsim Alanı Boş Geçilemez.',
+        'email.required' => 'Mail Alanı Boş Geçilemez.'
+    ];
+
+    $rules = [
+        'name' => 'required',
+        'email' => 'required',
+    ];
+    $data = Validator::make($request, $rules, $customMessages);
+
+    if ($data->fails()) {
+
+        $errors = ['email' => $data->errors()->all()];
+        return back()->withErrors($errors);
+    }
+
+    $user->name = $request['name'];
+    $user->email = $request['email'];
+
+    $user->save();
+
+    $pass=$request['password'];
+    if ($pass!=''){
+        $user->password = bcrypt($pass);
+        $user->save(); 
+    }
+    request()->session()->regenerate();
+    return view('admin.userupd');
+   }
 }
